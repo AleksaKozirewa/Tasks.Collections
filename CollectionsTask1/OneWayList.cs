@@ -9,6 +9,7 @@ namespace CollectionsTask1
     class OneWayList
     {
         OneWayListNode head = null;
+
         /// insert value to end of list
         public void Add(int value)
         {
@@ -26,9 +27,11 @@ namespace CollectionsTask1
                 {
                     current = current.Next;
                 }
+
                 current.Next = node;
             }
         }
+
         public class OneWayListNode
         {
             public OneWayListNode(int value)
@@ -36,26 +39,24 @@ namespace CollectionsTask1
                 Value = value;
                 Next = null;
             }
+
             public OneWayListNode(int value, OneWayListNode next)
             {
                 Value = value;
                 Next = next;
             }
+
             public int Value;
             public OneWayListNode Next;
         }
 
-        public int Count
-        {
-            get;
-            private set;
-        }
+        public int Count { get; private set; }
 
         public bool Remove(int value)
         {
             OneWayListNode current = head;
             OneWayListNode previous = null;
-            
+
             // 1: Пустой список: ничего не делать.
             // 2: Один элемент: установить Previous = null.
             // 3: Несколько элементов:
@@ -77,6 +78,7 @@ namespace CollectionsTask1
                         /// переустанавливаем значение head
                         head = head.Next;
                     }
+
                     Count--;
                     return true;
                 }
@@ -84,7 +86,7 @@ namespace CollectionsTask1
                 previous = current;
                 current = current.Next;
             }
-            
+
             return false;
         }
 
@@ -94,37 +96,33 @@ namespace CollectionsTask1
             var node = new OneWayListNode(value);
             OneWayListNode current = head;
 
-            if (head != null)
+            if (head != null && index != 0)
             {
-                if (index != 0)
+                for (var i = 0; i < index - 1; i++)
                 {
-                    for (var i = 0; i < index - 1; i++)
+                    if (current == null)
                     {
-                        if (current == null)
-                        {
-                            throw new ArgumentOutOfRangeException();
-                        }
-
-                        current = current.Next;
-
+                        throw new ArgumentOutOfRangeException();
                     }
 
-                    node.Next = current.Next;
-                    current.Next = node;
+                    current = current.Next;
                 }
 
-                node.Next = head;
+                node.Next = current.Next;
+                current.Next = node;
             }
 
-            if (index != 0)
+            else if (head == null && index != 0)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            head = node;
+            else if (index == 0)
+            {
+                node.Next = head;
+                head = node;
+            }
         }
-
     }
-
 }
 
