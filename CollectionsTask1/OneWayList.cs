@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -6,7 +7,7 @@ using Xunit.Sdk;
 
 namespace CollectionsTask1
 {
-    class OneWayList
+    class OneWayList : IEnumerable<int>
     {
         OneWayListNode head = null;
 
@@ -94,10 +95,11 @@ namespace CollectionsTask1
         public void AddAt(int value, int index)
         {
             var node = new OneWayListNode(value);
-            OneWayListNode current = head;
 
             if (head != null && index != 0)
             {
+                OneWayListNode current = head;
+
                 for (var i = 0; i < index - 1; i++)
                 {
                     if (current == null)
@@ -121,6 +123,106 @@ namespace CollectionsTask1
             {
                 node.Next = head;
                 head = node;
+            }
+        }
+
+        public bool RemoveAt(int index)
+        {
+            OneWayListNode current = head;
+            OneWayListNode previous = null;
+
+            while (current != null)
+            {
+                if (index != 0)
+                {
+                    for (var i = 0; i <= index; i++)
+                    {
+                        if (current == null)
+                        {
+                            throw new ArgumentOutOfRangeException();
+                        }
+
+                        current = current.Next;
+                    }
+
+                    previous = current;
+                    previous.Next = current.Next;
+                    return true;
+                }
+
+                head = head.Next;
+                return true;
+            }
+            return false;
+        }
+
+        public IEnumerator<int> GetEnumerator()
+        {
+            return new OneWayListEnumerator(head);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new OneWayListEnumerator(head);
+        }
+
+        private class OneWayListEnumerator : IEnumerator<int>
+        {
+            private OneWayListNode _current;
+            private OneWayListNode _head;
+
+            public OneWayListEnumerator(OneWayListNode head)
+            {
+                _head = head;
+            }
+
+            public int Current
+            {
+                get
+                {
+                    if (_current == null)
+                    {
+                        throw new Exception("Enumerator not started");
+                    }
+
+                    return _current.Value;
+                }
+            }
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+
+            }
+
+            public bool MoveNext()
+            {
+                if (_current == null)
+                {
+                    if (_head == null)
+                    {
+                        return false;
+                    }
+
+                    _current = _head;
+                    return true;
+                }
+                else
+                {
+                    if (_current.Next == null)
+                    {
+                        return false;
+                    }
+
+                    _current = _current.Next;
+                    return true;
+                }
+            }
+
+            public void Reset()
+            {
+                _current = null;
             }
         }
     }
