@@ -156,6 +156,28 @@ namespace CollectionsTask1
             return false;
         }
 
+        public int GetElementByIndex(int index)
+        {
+            OneWayListNode current = head;
+
+            while (current != null)
+            {
+                for (var i = 0; i <= index; i++)
+                {
+                    if (current == null)
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
+
+                    current = current.Next;
+                }
+
+                return current.Value;
+            }
+
+            throw new ArgumentOutOfRangeException();
+        }
+
         public IEnumerator<int> GetEnumerator()
         {
             return new OneWayListEnumerator(head);
