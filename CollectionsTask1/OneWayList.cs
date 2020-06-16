@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Transactions;
 using Xunit.Sdk;
 
 namespace CollectionsTask1
@@ -91,7 +95,6 @@ namespace CollectionsTask1
             return false;
         }
 
-        ///add value before {index} element
         public void AddAt(int value, int index)
         {
             var node = new OneWayListNode(value);
@@ -135,17 +138,18 @@ namespace CollectionsTask1
             {
                 if (index != 0)
                 {
-                    for (var i = 0; i <= index; i++)
+                    for (var i = 0; i < index; i++)
                     {
-                        if (current == null)
+                        previous = current;
+
+                        if (current == null || current.Next == null)
                         {
-                            throw new ArgumentOutOfRangeException();
+                            return false;
                         }
 
                         current = current.Next;
                     }
 
-                    previous = current;
                     previous.Next = current.Next;
                     return true;
                 }
@@ -153,6 +157,7 @@ namespace CollectionsTask1
                 head = head.Next;
                 return true;
             }
+
             return false;
         }
 
@@ -162,7 +167,7 @@ namespace CollectionsTask1
 
             while (current != null)
             {
-                for (var i = 0; i <= index; i++)
+                for (var i = 0; i < index; i++)
                 {
                     if (current == null)
                     {
@@ -178,6 +183,81 @@ namespace CollectionsTask1
             throw new ArgumentOutOfRangeException();
         }
 
+        public int this[int index]
+        {
+            get
+            {
+                return GetElementByIndex(index);
+            }
+
+            set
+            {
+                AddAt(value, index);
+                RemoveAt(index + 1);
+            }
+        }
+
+        public void Sort()
+        {
+            if (head == null)
+            {
+                return;
+            }
+
+            OneWayListNode node1 = head;
+            OneWayListNode node2 = head.Next;
+            int temp;
+            bool doubt = false;
+
+            do
+            {
+                doubt = false;
+                while (node1 != null && node1.Next != null)
+                {
+
+                    if (node2.Value < node1.Value)
+                    {
+                        doubt = true;
+                        temp = node1.Value;
+                        node1.Value = node2.Value;
+                        node2.Value = temp;
+                    }
+
+                    node1 = node1.Next;
+                    node2 = node2.Next;
+
+                }
+
+                node1 = head;
+                node2 = node1.Next;
+
+            } while (doubt);
+
+        }
+
+        public void Reverse()
+        {
+            OneWayListNode current = head;
+            OneWayListNode previous = null;
+
+            if (current == null)
+            {
+                return;
+            }
+
+            while (current.Next != null)
+            {
+                current = head;
+                OneWayListNode next = current.Next;
+                current.Next = previous;
+                previous = current;
+                current = next;
+            }
+
+            current.Next = previous;
+            head = current;
+        }
+
         public IEnumerator<int> GetEnumerator()
         {
             return new OneWayListEnumerator(head);
@@ -190,10 +270,10 @@ namespace CollectionsTask1
 
         private class OneWayListEnumerator : IEnumerator<int>
         {
-            private OneWayListNode _current;
-            private OneWayListNode _head;
+            private OneWayList.OneWayListNode _current;
+            private OneWayList.OneWayListNode _head;
 
-            public OneWayListEnumerator(OneWayListNode head)
+            public OneWayListEnumerator(OneWayList.OneWayListNode head)
             {
                 _head = head;
             }
@@ -247,6 +327,9 @@ namespace CollectionsTask1
                 _current = null;
             }
         }
+
     }
 }
+
+
 
