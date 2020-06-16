@@ -8,18 +8,21 @@ namespace CollectionsTask1
 {
     public class OneWayListTest
     {
-        [Fact]
-        public void ListShouldBeConvertedToArray()
+        [Theory]
+        [InlineData(new[] { 1, 2, 3, 4, 5 })]
+        [InlineData(new int[0])]
+        [InlineData(new[] { 1 })]
+        public void ListShouldBeConvertedToArray(int[] input)
         {
             var list = new OneWayList();
 
-            list.Add(1);
-            list.Add(2);
-            list.Add(3);
+            for (var i = 0; i < input.Length; i++)
+            {
+                list.Add(input[i]);
+            }
 
-            var array = list.ToArray();
-            Assert.Equal(new int[] { 1, 2, 3 }, array);
-
+            var array = list.ConvertToArray();
+            Assert.Equal(input, array);
         }
 
         [Fact]
@@ -105,7 +108,7 @@ namespace CollectionsTask1
             var array = list.ToArray();
             Assert.Equal(new int[] { }, array);
         }
-
+        
         [Theory]
         [InlineData(new[] { 5, 3, 2, 4, 1 }, new[] { 1, 2, 3, 4, 5 })]
         [InlineData(new[] { 5, 3 }, new[] { 3, 5 })]

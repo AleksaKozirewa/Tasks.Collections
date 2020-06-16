@@ -258,6 +258,39 @@ namespace CollectionsTask1
             head = current;
         }
 
+        public int[] ConvertToArray()
+        {
+            OneWayListNode current = head;
+            var list = new OneWayList();
+            var countOfNodes = 1;
+            
+            if (current == null)
+            {
+                var arr = new int[0];
+                return arr;
+            }
+            
+            while (current.Next != null)
+            {
+                if (current != null)
+                {
+                    countOfNodes = countOfNodes + 1;
+                    current = current.Next;
+                }
+            }
+
+            var array = new int[countOfNodes];
+            current = head;
+            
+            for (var i = 0; i < array.Length; i++)
+            {
+                array[i] = current.Value;
+                current = current.Next;
+            }
+
+            return array;
+        }
+
         public IEnumerator<int> GetEnumerator()
         {
             return new OneWayListEnumerator(head);
