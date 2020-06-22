@@ -99,14 +99,14 @@ namespace CollectionsTask1
         public void ListShouldBeReversed()
         {
             var list = new OneWayList();
-            //list.Add(1);
-            // list.Add(2);
-            // list.Add(3);
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
 
             list.Reverse();
 
             var array = list.ToArray();
-            Assert.Equal(new int[] { }, array);
+            Assert.Equal(new int[] { 3, 2, 1}, array);
         }
         
         [Theory]

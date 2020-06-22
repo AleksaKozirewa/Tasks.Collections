@@ -28,12 +28,15 @@ namespace CollectionsTask1
             {
                 // not empty collection
                 TwoWayListNode current = head;
+                TwoWayListNode previous = current.Previous;
                 while (current.Next != null)
                 {
+                    previous = current;
                     current = current.Next;
                 }
 
                 current.Next = node;
+                Count++;
             }
         }
 
@@ -63,8 +66,13 @@ namespace CollectionsTask1
         public bool Remove(int value)
         {
             TwoWayListNode current = head;
+
+            if (current == null)
+            {
+                return false;
+            }
+
             TwoWayListNode previous = current.Previous;
-                //current.Previous = null;
 
             // 1: Пустой список: ничего не делать.
             // 2: Один элемент: установить Previous = null.
@@ -92,13 +100,12 @@ namespace CollectionsTask1
                     return true;
                 }
 
-                previous = current;
-
                 if (current.Next == null)
                 {
                     return false;
                 }
 
+                previous = current;
                 current = current.Next;
                 current.Previous = previous;
             }
@@ -113,14 +120,15 @@ namespace CollectionsTask1
             if (head != null && index != 0)
             {
                 TwoWayListNode current = head;
+                TwoWayListNode previous = current.Previous;
 
                 for (var i = 0; i < index - 1; i++)
                 {
                     if (current == null)
                     {
-                        throw new ArgumentOutOfRangeException();
+                        return;
                     }
-
+                    previous = current;
                     current = current.Next;
                 }
 
@@ -143,6 +151,12 @@ namespace CollectionsTask1
         public bool RemoveAt(int index)
         {
             TwoWayListNode current = head;
+
+            if (current == null)
+            {
+                return false;
+            }
+
             TwoWayListNode previous = current.Previous;
 
             while (current != null)
@@ -153,14 +167,14 @@ namespace CollectionsTask1
                     {
                         previous = current;
 
-                        if (current == null || current.Next == null)
+                        if (current.Next == null)
                         {
                             return false;
                         }
 
+                        previous = current;
                         current = current.Next;
                         current.Previous = previous;
-
                     }
 
                     previous.Next = current.Next;
@@ -205,8 +219,27 @@ namespace CollectionsTask1
 
             set
             {
-                AddAt(value, index);
-                RemoveAt(index + 1);
+                var node = new TwoWayListNode(value);
+
+                TwoWayListNode current = head;
+
+                for (var i = 0; i < index; i++)
+                {
+                    if (current == null)
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
+
+                    current = current.Next;
+                }
+
+                if (current == null)
+                {
+                    return;
+                }
+
+                current.Value = node.Value;
+
             }
         }
 
@@ -250,20 +283,18 @@ namespace CollectionsTask1
 
         public void Reverse()
         {
-            TwoWayListNode current = head;
-            
-
-            if (current == null)
+            if (head == null)
             {
                 return;
             }
 
+            TwoWayListNode current = head;
             TwoWayListNode previous = current.Previous;
+            TwoWayListNode next = current.Next;
 
             while (current.Next != null)
             {
-                current = head;
-                TwoWayListNode next = current.Next;
+                next = current.Next;
                 current.Next = previous;
                 previous = current;
                 current = next;
@@ -276,7 +307,6 @@ namespace CollectionsTask1
         public int[] ConvertToArray()
         {
             TwoWayListNode current = head;
-            var list = new TwoWayList();
             var countOfNodes = 1;
 
             if (current == null)

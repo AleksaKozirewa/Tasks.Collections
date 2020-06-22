@@ -237,18 +237,19 @@ namespace CollectionsTask1
 
         public void Reverse()
         {
-            OneWayListNode current = head;
-            OneWayListNode previous = null;
-
-            if (current == null)
+            if (head == null)
             {
                 return;
             }
 
+            OneWayListNode current = head;
+            OneWayListNode previous = null;
+            OneWayListNode next = null;
+
             while (current.Next != null)
             {
-                current = head;
-                OneWayListNode next = current.Next;
+                
+                next = current.Next;
                 current.Next = previous;
                 previous = current;
                 current = next;
