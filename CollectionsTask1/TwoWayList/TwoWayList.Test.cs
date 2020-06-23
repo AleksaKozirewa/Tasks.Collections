@@ -53,7 +53,6 @@ namespace CollectionsTask1
         [InlineData(new int[0], 0, 0, new int[] { 0 })]
         [InlineData(new[] { 1, 2, 3 }, 3, 4, new[] { 1, 2, 3, 4 })]
         [InlineData(new[] { 1 }, 0, 2, new[] { 2, 1 })]
-        [InlineData(new[] { 1 }, 3, 2, new[] { 1 })]
         public void ShouldAddElementAtListAtSomePosition(int[] input, int index, int value, int[] expected)
         {
             var list = new TwoWayList();
@@ -67,6 +66,16 @@ namespace CollectionsTask1
 
             var array = list.ToArray();
             Assert.Equal(expected, array);
+        }
+
+        [Fact]
+        public void ShouldAddElementAtListAtSomePosition1()
+        {
+            var list = new TwoWayList();
+
+            list.Add(1);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => list.AddAt(2, 3));
         }
 
         [Theory]

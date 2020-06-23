@@ -31,8 +31,14 @@ namespace CollectionsTask1
                 TwoWayListNode previous = current.Previous;
                 while (current.Next != null)
                 {
+                    if (current == null)
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
+
                     previous = current;
                     current = current.Next;
+
                 }
 
                 current.Next = node;
@@ -59,6 +65,7 @@ namespace CollectionsTask1
             public int Value;
             public TwoWayListNode Next;
             public TwoWayListNode Previous;
+
         }
 
         public int Count { get; private set; }
@@ -116,7 +123,7 @@ namespace CollectionsTask1
         public void AddAt(int value, int index)
         {
             var node = new TwoWayListNode(value);
-
+            
             if (head != null && index != 0)
             {
                 TwoWayListNode current = head;
@@ -126,8 +133,9 @@ namespace CollectionsTask1
                 {
                     if (current == null)
                     {
-                        return;
+                        throw new ArgumentOutOfRangeException();
                     }
+
                     previous = current;
                     current = current.Next;
                 }
