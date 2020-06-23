@@ -15,6 +15,14 @@ namespace CollectionsTask1
     {
         TwoWayListNode head = null;
 
+        public TwoWayList(int[] input)
+        {
+            for (var i = 0; i < input.Length; i++)
+            {
+                Add(input[i]);
+            }
+        }
+
         /// insert value to end of list
         public void Add(int value)
         {

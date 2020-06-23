@@ -14,101 +14,78 @@ namespace CollectionsTask1
         [InlineData(new[] { 1 })]
         public void ListShouldBeConvertedToArray(int[] input)
         {
-            var list = new OneWayList();
-
-            for (var i = 0; i < input.Length; i++)
-            {
-                list.Add(input[i]);
-            }
-
+            OneWayList list = new OneWayList(input);
             var array = list.ConvertToArray();
             Assert.Equal(input, array);
         }
 
-        [Fact]
-        public void ShouldRemoveElementAtList()
+        [Theory]
+        [InlineData(new[] { 1, 2, 3 }, 1, new[] { 2, 3 })]
+        [InlineData(new[] { 1, 2, 3 }, 2, new[] { 1, 3 })]
+        [InlineData(new[] { 1, 2, 3 }, 3, new[] { 1, 2 })]
+        [InlineData(new int[0], 0, new int[0])]
+        [InlineData(new[] { 1, 2, 3 }, 4, new[] { 1, 2, 3 })]
+        public void ShouldRemoveElementAtList(int[] input, int value, int[] expected)
         {
-            var list = new OneWayList();
-
-            list.Add(1);
-            list.Add(2);
-            list.Add(3);
-
-            list.Remove(3);
-
+            OneWayList list = new OneWayList(input);
+            list.Remove(value);
             var array = list.ToArray();
-            Assert.Equal(new int[]
-            {
-                1, 2
-
-            }, array);
+            Assert.Equal(expected, array);
         }
 
-        [Fact]
-        public void ShouldAddElementAtListAtSomePosition()
+        [Theory]
+        [InlineData(new[] { 1, 2, 3 }, 0, new[] { 2, 3 })]
+        [InlineData(new[] { 1, 2, 3 }, 1, new[] { 1, 3 })]
+        [InlineData(new[] { 1, 2, 3 }, 2, new[] { 1, 2 })]
+        [InlineData(new int[0], 0, new int[0])]
+        [InlineData(new[] { 1, 2, 3 }, 4, new[] { 1, 2, 3 })]
+        public void ShouldRemoveElementAtListAtSomePosition(int[] input, int index, int[] expected)
         {
-            var list = new OneWayList();
-
-            list.Add(1);
-            list.Add(2);
-            list.Add(3);
-
-            list.AddAt(4, 0);
-
+            OneWayList list = new OneWayList(input);
+            list.RemoveAt(index);
             var array = list.ToArray();
+            Assert.Equal(expected, array);
 
-            Assert.Equal(new int[] {4, 1, 2, 3}, array);
+        }
+
+        [Theory]
+        [InlineData(new[] { 1, 2, 3 }, 0, 0, new[] { 0, 1, 2, 3 })]
+        [InlineData(new[] { 1, 2, 3 }, 1, 1, new[] { 1, 1, 2, 3 })]
+        [InlineData(new[] { 1, 2, 3 }, 2, 3, new[] { 1, 2, 3, 3 })]
+        [InlineData(new int[0], 0, 0, new int[] { 0 })]
+        [InlineData(new[] { 1, 2, 3 }, 3, 4, new[] { 1, 2, 3, 4 })]
+        [InlineData(new[] { 1 }, 0, 2, new[] { 2, 1 })]
+        public void ShouldAddElementAtListAtSomePosition(int[] input, int index, int value, int[] expected)
+        {
+            OneWayList list = new OneWayList(input);
+            list.AddAt(value, index);
+            var array = list.ToArray();
+            Assert.Equal(expected, array);
         }
 
         [Theory]
         [InlineData(new[] {5, 3}, 0, 2, new[] {2, 3})]
         public void ShouldSetElementByUsingIndexing(int [] input, int index, int value, int [] expected)
         {
-            var list = new OneWayList();
-
-            for (var i = 0; i < input.Length; i++)
-            {
-                list.Add(input[i]);
-            }
-
+            OneWayList list = new OneWayList(input);
             list[index] = value;
-
             var array = list.ToArray();
             Assert.Equal(expected, array);
         }
 
-        [Fact]
-        public void ShouldRemoveElementAtListAtSomePosition()
+        [Theory]
+        [InlineData(new[] { 1, 2, 3, 4, 5 }, new[] { 5, 4, 3, 2, 1 })]
+        [InlineData(new[] { 1, 2, 3 }, new[] { 3, 2, 1 })]
+        [InlineData(new[] { 1 }, new[] { 1 })]
+        [InlineData(new int[0], new int[0])]
+        public void ListShouldBeReversed(int[] input, int[] expected)
         {
-            var list = new OneWayList();
-
-            list.Add(1);
-            list.Add(2);
-            list.Add(3);
-            list.Add(4);
-            list.Add(5);
-
-            list.RemoveAt(1);
-
-            var array = list.ToArray();
-
-            Assert.Equal(new int[] { 1, 3, 4, 5}, array);
-        }
-
-        [Fact]
-        public void ListShouldBeReversed()
-        {
-            var list = new OneWayList();
-            list.Add(1);
-            list.Add(2);
-            list.Add(3);
-
+            OneWayList list = new OneWayList(input);
             list.Reverse();
-
             var array = list.ToArray();
-            Assert.Equal(new int[] { 3, 2, 1}, array);
+            Assert.Equal(expected, array);
         }
-        
+
         [Theory]
         [InlineData(new[] { 5, 3, 2, 4, 1 }, new[] { 1, 2, 3, 4, 5 })]
         [InlineData(new[] { 5, 3 }, new[] { 3, 5 })]
@@ -116,15 +93,8 @@ namespace CollectionsTask1
         [InlineData(new int[0], new int[0])]
         public void ListShouldBeSorted(int[] input, int[] expected)
         {
-            var list = new OneWayList();
-
-            for (var i = 0; i < input.Length; i++)
-            {
-                list.Add(input[i]);
-            }
-
+            OneWayList list = new OneWayList(input);
             list.Sort();
-
             var array = list.ToArray();
             Assert.Equal(expected, array);
         }
@@ -136,12 +106,7 @@ namespace CollectionsTask1
         [InlineData(new[] { 1 }, 0, 1)]
         public void ShouldGetElementByValidIndex(int[] arr, int index, int value)
         {
-            var list = new OneWayList();
-            for (var i = 0; i < arr.Length; i++)
-            {
-                list.Add(arr[i]);
-            }
-
+            OneWayList list = new OneWayList(arr);
             var expectedValue = list.GetElementByIndex(index);
             Assert.Equal(expectedValue, value);
         }

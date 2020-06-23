@@ -15,6 +15,14 @@ namespace CollectionsTask1
     {
         OneWayListNode head = null;
 
+        public OneWayList(int[] input)
+        {
+            for (var i = 0; i < input.Length; i++)
+            {
+                Add(input[i]);
+            }
+        }
+
         /// insert value to end of list
         public void Add(int value)
         {
@@ -248,7 +256,7 @@ namespace CollectionsTask1
 
             while (current.Next != null)
             {
-                
+
                 next = current.Next;
                 current.Next = previous;
                 previous = current;
@@ -262,15 +270,14 @@ namespace CollectionsTask1
         public int[] ConvertToArray()
         {
             OneWayListNode current = head;
-            var list = new OneWayList();
             var countOfNodes = 1;
-            
+
             if (current == null)
             {
                 var arr = new int[0];
                 return arr;
             }
-            
+
             while (current.Next != null)
             {
                 if (current != null)
@@ -282,7 +289,7 @@ namespace CollectionsTask1
 
             var array = new int[countOfNodes];
             current = head;
-            
+
             for (var i = 0; i < array.Length; i++)
             {
                 array[i] = current.Value;
